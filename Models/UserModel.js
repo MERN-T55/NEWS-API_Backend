@@ -16,6 +16,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is required"],
   },
+  preferences: {
+    type: [String],
+    validate: {
+      validator: function (v) {
+        return v.length >= 1;
+      },
+      message: "There must be atleast one preference.",
+    },
+  },
 });
 
 userSchema.pre("save", async function () {
