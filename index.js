@@ -2,10 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
-require("dotenv").config();
-const cookieParser = require("cookie-parser");
 const authRoute = require("./Routes/AuthRoute");
 const { MONGO_URL, PORT } = process.env;
+require("dotenv").config();
 mongoose
   .connect(MONGO_URL)
   .then(() => console.log("MongoDB is  connected successfully"))
@@ -14,12 +13,6 @@ mongoose
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
-
-const corsOptions = {
-  credentials: true,
-  origin: 'http://localhost:3000'
-};
-app.use(cors(corsOptions));
-app.use(cookieParser());
+app.use(cors());
 app.use(express.json());
 app.use("/", authRoute);
