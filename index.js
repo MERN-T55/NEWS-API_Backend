@@ -15,7 +15,7 @@ app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
 
-app.use(cors({credentials: true}));
+app.use(cors({credentials: true, origin: '*'}));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/", authRoute);
