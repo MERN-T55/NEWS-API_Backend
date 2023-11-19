@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 const authRoute = require("./Routes/AuthRoute");
-const { MONGO_URL, PORT } = process.env;
 require("dotenv").config();
+const { MONGO_URL, PORT } = process.env;
+
 mongoose
   .connect(MONGO_URL)
   .then(() => console.log("MongoDB is  connected successfully"))
