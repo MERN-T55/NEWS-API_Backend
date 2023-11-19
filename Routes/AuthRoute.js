@@ -2,6 +2,9 @@ const { Signup, Login } = require("../Controllers/AuthController");
 const { userVerification } = require("../Middlewares/AuthMiddleware");
 const router = require("express").Router();
 const User = require("../Models/UserModel");
+const News = require("../Models/NewsModel");
+const axios = require("axios");
+require("dotenv").config();
 const mongoose = require("mongoose");
 router.post("/signup", Signup);
 router.post("/login", Login);
@@ -26,6 +29,35 @@ router.put("/userInfo/:id", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Server Error");
+  }
+});
+
+router.get("/news", async (req, res) => {
+  try {
+    const { topic } = req.query;
+    await News.deleteMany({});
+    const apiKey = process.env.NEWSAPI;
+    const apiUrl = topic
+      ? `https://newsapi.org/v2/everything?q=${topic}&apiKey=${apiKey}`
+      : `https://newsapi.org/v2/top-headlines?country=in&apiKey=${apiKey}`;
+    const response = await axios.get(apiUrl);
+    const newsData = response.data.articles.map((article) => ({
+      title: article.title,
+      description: article.description,
+      urlToImage: article.urlToImage,
+      author: article.author,
+      publishedAt: new Date(article.publishedAt),
+      source: {
+        id: article.source.id,
+        name: article.source.name,
+      },
+    }));
+    await News.insertMany(newsData);
+    const data = await News.find({});
+    res.json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error fetching and saving news");
   }
 });
 
