@@ -61,4 +61,8 @@ router.get("/news", async (req, res) => {
   }
 });
 
+router.get('/',(req,res)=>{
+    res.send("Welcome to BriefBurst backend!")
+})
+
 module.exports = router;
