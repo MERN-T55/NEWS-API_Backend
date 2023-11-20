@@ -54,6 +54,7 @@ module.exports.Login = async (req, res, next) => {
     });
     next();
   } catch (error) {
-    console.error(error);
+    console.error("Error during login:", error);
+    res.status(500).json({ message: "An error occurred while logging in", success: false });
   }
 };
